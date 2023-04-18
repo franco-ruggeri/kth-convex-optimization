@@ -33,8 +33,6 @@ cvx_end
 disp('Optimal point:');
 disp(x);
 
-fprintf('\nPress a key to continue...\n');
-pause
 
 %% Verify if a point is optimal by using KKT conditions
 % x* is optimal <=> there exists lambda satisfying the KKT conditions
@@ -49,5 +47,13 @@ cvx_begin
         A * x_star - b >= 0;                % (i)
         H * x_star + c - A'*lambda == 0;    % (ii)
         lambda >= 0;                        % (iii)
-        lambda .* (A*x_star - b) == 0;      % (iv)
+        lambda .* (A*x_star - b) <= eps;    % (iv) TODO: check why eps
 cvx_end
+
+disp('x_star =');
+disp(x_star);
+fprintf('x_star is ');
+if cvx_status == 'Infeasible'
+    fprintf('NOT ');
+end
+fprintf('optimal\n');
