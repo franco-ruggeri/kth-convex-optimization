@@ -33,8 +33,6 @@ cvx_begin
     subject to
         lambda : k*x + l - y + t >= 0;
         mu : -k*x - l + y + t >= 0;
-        % equivalent
-        % -t <= k * x + l * ones(m,1) - y <= t;
 cvx_end
 
 disp('Inf-norm approximation');
@@ -59,8 +57,6 @@ cvx_begin
     subject to
         lambda : k*x + l - y + t >= 0;
         mu : -k*x - l + y + t >= 0;
-        % equivalent
-        % -t <= k * x + l * ones(m,1) - y <= t;
 cvx_end
 
 disp('L1-norm approximation');
