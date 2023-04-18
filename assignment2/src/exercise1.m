@@ -2,6 +2,7 @@ clear all;
 close all;
 clc;
 
+
 %% Prepare problem parameters
 
 H = [
@@ -16,6 +17,11 @@ b = -1 * ones(2*n, 1);
 
 
 %% Solve linearly constrained convex problem
+
+% The default solver struggles and stops with status Solved
+% The MOSEK solver correctly detects the infeasibility
+% See https://ask.cvxr.com/t/constraint-violated-in-linear-programming/11298/4
+cvx_solver mosek
 
 cvx_begin
     variable x(n);
@@ -47,13 +53,13 @@ cvx_begin
         A * x_star - b >= 0;                % (i)
         H * x_star + c - A'*lambda == 0;    % (ii)
         lambda >= 0;                        % (iii)
-        lambda .* (A*x_star - b) <= eps;    % (iv) TODO: check why eps
+        lambda .* (A*x_star - b) == 0;      % (iv)
 cvx_end
 
 disp('x_star =');
 disp(x_star);
 fprintf('x_star is ');
-if cvx_status == 'Infeasible'
+if strcmp(cvx_status,'Infeasible')
     fprintf('NOT ');
 end
 fprintf('optimal\n');
