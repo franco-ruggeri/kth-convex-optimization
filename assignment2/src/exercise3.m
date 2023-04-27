@@ -15,7 +15,7 @@ y(end)=3*y(end);    % outlier
 
 fig = figure;
 hold on;
-legend();
+legend;
 scatter(x,y,'DisplayName','data');
 
 
