@@ -28,19 +28,9 @@ def main():
     m = 10      # test different values!
     n = 5       # test different values!
 
-    A = np.array([
-        [8   ,  1    , 8   , 14  ,  16  ,  18   ,  2   ,  6    ,20   ,  9],
-        [15  ,   3   , 14  ,   8  ,  20  ,   1  ,   8  ,  14   , 15  ,  19],
-        [0   ,  7   ,  4   , 11   ,  6   ,  0   , 20  ,  17    , 5  ,   6],
-        [6   ,  8   , 18   ,  2   , 14  ,   3  ,  11  ,   0    ,16  ,   6],
-        [3   , 11    , 0   ,  4   , 18  ,  18  ,  14   , 15   ,  2   ,  2],
-    ])
-    b = np.array([1, 14, 5, 6, 10])
-    c = np.array([0,6,1,6,7,1,4,7,4,0])
-
-    # A = np.random.rand(n, m)
-    # b = m * np.random.rand(n)
-    # c = np.random.rand(m)
+    A = np.random.rand(n, m)
+    b = m * np.random.rand(n)
+    c = np.random.rand(m)
 
     start = datetime.now()
     x, obj, y, it = solve_maxsumlog(A, b, c)
