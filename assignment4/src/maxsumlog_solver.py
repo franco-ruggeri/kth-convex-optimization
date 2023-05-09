@@ -3,16 +3,18 @@ from tqdm import tqdm
 
 
 class MaxSumLogSolver:
-    def __init__(self, sigma=.1, beta=.8, eps=1e-5):
+    def __init__(self, sigma=.1, beta=.8, eps=1e-5, verbose=False):
         """Init maxsumlog solver.
 
         :param sigma: Reduction factor for barrier parameter. Default: 0.1 (long-shot).
         :param beta: Reduction factor for step length in backtrace search.
         :param eps: Tolerance for duality gap.
+        :param verbose: if True, prints a progress bar with some statistics.
         """
         self.sigma = sigma
         self.beta = beta
         self.eps = eps
+        self.verbose = verbose
 
     @staticmethod
     def _is_strictly_feasible(x, y, A, b):
@@ -38,8 +40,8 @@ class MaxSumLogSolver:
         assert c.shape == (m,)
         opt_value = None
         n_iterations = 0
-        progress_bar = tqdm()
         d_g = np.vstack([-A, np.eye(m)])                # derivative matrix of constraints
+        progress_bar = tqdm() if self.verbose else None
 
         # Initialize with strictly feasible primal-dual point
         x = 1e-5 * np.ones(m)
@@ -80,15 +82,17 @@ class MaxSumLogSolver:
             x += alpha * delta_x
             y += alpha * delta_y
 
-            # Print stats
+            # Update stats
             n_iterations += 1
             opt_value = np.log(1 + x * c).sum()
-            progress_bar.update(n_iterations)
-            progress_bar.set_description(
-                f'mu: {mu:.2f}'
-                f' - surrogate duality gap: {eta:.2f}'
-                f' - objective: {opt_value:.2f}'
-            )
+            if self.verbose:
+                progress_bar.update(1)
+                progress_bar.set_description(
+                    f'mu: {mu:.2f}'
+                    f' - surrogate duality gap: {eta:.2f}'
+                    f' - objective: {opt_value:.2f}'
+                )
 
-        progress_bar.close()
+        if self.verbose:
+            progress_bar.close()
         return x, opt_value, y, n_iterations
